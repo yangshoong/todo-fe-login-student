@@ -17,14 +17,6 @@ const TodoPage = () => {
     setTodoList(response.data.data);
   };
 
-  useEffect(() => {
-    getTasks();
-  }, []);
-
-  const handleLogout = () => {
-    navigate("/login");
-  };
-
   const addTodo = async () => {
     try {
       const response = await api.post("/tasks", { task: todoValue, isComplete: false });
@@ -63,6 +55,14 @@ const TodoPage = () => {
       console.log("error", error);
     }
   };
+
+  const handleLogout = () => {
+    navigate("/login");
+  };
+
+  useEffect(() => {
+    getTasks();
+  }, []);
 
   return (
     <Container>
