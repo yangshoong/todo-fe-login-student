@@ -13,9 +13,11 @@ const TodoPage = () => {
     const response = await api.get("/tasks");
     setTodoList(response.data.data);
   };
+
   useEffect(() => {
     getTasks();
   }, []);
+
   const addTodo = async () => {
     try {
       const response = await api.post("/tasks", {
@@ -23,9 +25,9 @@ const TodoPage = () => {
         isComplete: false,
       });
       if (response.status === 200) {
-        getTasks();
+        setTodoList([...todoList, response.data.data]);
+        setTodoValue("");
       }
-      setTodoValue("");
     } catch (error) {
       console.log("error:", error);
     }
@@ -56,6 +58,7 @@ const TodoPage = () => {
       console.log("error", error);
     }
   };
+
   return (
     <Container>
       <Row className="add-item-row">
@@ -64,6 +67,11 @@ const TodoPage = () => {
             type="text"
             placeholder="할일을 입력하세요"
             onChange={(event) => setTodoValue(event.target.value)}
+            onKeyPress={(event) => {
+              if (event.key === 'Enter') {
+                addTodo();
+              }
+            }}
             className="input-box"
             value={todoValue}
           />
@@ -74,7 +82,6 @@ const TodoPage = () => {
           </button>
         </Col>
       </Row>
-
       <TodoBoard
         todoList={todoList}
         deleteItem={deleteItem}
