@@ -69,7 +69,7 @@ const TodoPage = () => {
       getTasks();
       setUserName(name); 
     }
-  }, [navigate]);
+  }, [navigate, todoList]);
 
   return (
     <Container>
