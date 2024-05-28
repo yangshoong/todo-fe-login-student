@@ -4,12 +4,12 @@ import api from "../utils/api";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
-import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
 
 const TodoPage = () => {
   const [todoList, setTodoList] = useState([]);
   const [todoValue, setTodoValue] = useState("");
+  const [userName, setUserName] = useState(""); 
   const navigate = useNavigate();
 
   const getTasks = async () => {
@@ -56,45 +56,58 @@ const TodoPage = () => {
 
   const handleLogout = () => {
     sessionStorage.removeItem("token");
+    sessionStorage.removeItem("userName"); 
     navigate("/login");
   };
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
+    const name = sessionStorage.getItem("userName"); 
     if (!token) {
       navigate("/login");
     } else {
       getTasks();
+      setUserName(name); 
     }
   }, [navigate]);
 
   return (
     <Container>
-      <Row className="add-item-row justify-content-between">
-        <Col xs={12} sm={10}>
-          <input
-            type="text"
-            placeholder="할일을 입력하세요"
-            onChange={(event) => setTodoValue(event.target.value)}
-            onKeyPress={(event) => {
-              if (event.key === 'Enter') {
-                addTodo();
-              }
-            }}
-            className="input-box"
-            value={todoValue}
-          />
-        </Col>
-        <Col xs={12} sm={2} className="d-flex justify-content-end">
-          <Button variant="submit" onClick={addTodo} className="mr-2">
-            추가
-          </Button>
-          <Button variant="submit" onClick={handleLogout}>
+      <p>
+
+      </p>
+      <Row className="justify-content-end align-items-center mb-3">
+        <Col xs="auto">
+          <span className="mr-2">{userName} 님</span>
+          <button className="button-add" onClick={handleLogout}>
             로그아웃
-          </Button>
+          </button>
         </Col>
       </Row>
-      <TodoBoard todoList={todoList} deleteItem={deleteItem} toggleComplete={toggleComplete} />
+      <Container>
+        <Row className="add-item-row">
+          <Col xs={12} sm={10}>
+            <input
+              type="text"
+              placeholder="할일을 입력하세요"
+              onChange={(event) => setTodoValue(event.target.value)}
+              onKeyPress={(event) => {
+                if (event.key === 'Enter') {
+                  addTodo();
+                }
+              }}
+              className="input-box"
+              value={todoValue}
+            />
+          </Col>
+          <Col xs={12} sm={2}>
+            <button onClick={addTodo} className="button-add">
+              추가
+            </button>
+          </Col>
+        </Row>
+        <TodoBoard todoList={todoList} deleteItem={deleteItem} toggleComplete={toggleComplete} />
+      </Container>
     </Container>
   );
 };
