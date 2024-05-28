@@ -8,10 +8,9 @@ import RegisterPage from "./pages/RegisterPage";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<LoginPage />} />
+      <Route path="/" element={<TodoPage />} />
+      <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-
-      <Route path="/Todo" element={<TodoPage />} />
     </Routes>
   );
 }
