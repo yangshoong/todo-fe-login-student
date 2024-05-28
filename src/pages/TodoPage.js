@@ -46,9 +46,7 @@ const TodoPage = () => {
       const response = await api.put(`/tasks/${id}`, { isComplete: !task.isComplete });
       if (response.status === 200) {
         setTodoList(
-          todoList.map((item) =>
-            item._id === id ? { ...item, isComplete: !item.isComplete } : item
-          )
+          todoList.map((item) => (item._id === id ? { ...item, isComplete: !item.isComplete } : item))
         );
       }
     } catch (error) {
@@ -57,25 +55,22 @@ const TodoPage = () => {
   };
 
   const handleLogout = () => {
+    sessionStorage.removeItem("token");
     navigate("/login");
   };
 
   useEffect(() => {
-    getTasks();
-  }, []);
+    const token = sessionStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    } else {
+      getTasks();
+    }
+  }, [navigate]);
 
   return (
     <Container>
-      <Row className="justify-content-end mb-3">
-        <Col xs="auto">
-          <Button variant="primary" onClick={handleLogout}>
-            로그아웃
-          </Button>
-        </Col>
-      </Row>
-
-    <Container>
-      <Row className="add-item-row">
+      <Row className="add-item-row justify-content-between">
         <Col xs={12} sm={10}>
           <input
             type="text"
@@ -90,18 +85,16 @@ const TodoPage = () => {
             value={todoValue}
           />
         </Col>
-        <Col xs={12} sm={2}>
-          <button onClick={addTodo} className="button-add">
+        <Col xs={12} sm={2} className="d-flex justify-content-end">
+          <Button variant="submit" onClick={addTodo} className="mr-2">
             추가
-          </button>
+          </Button>
+          <Button variant="submit" onClick={handleLogout}>
+            로그아웃
+          </Button>
         </Col>
       </Row>
-      <TodoBoard
-        todoList={todoList}
-        deleteItem={deleteItem}
-        toggleComplete={toggleComplete}
-      />
-    </Container>
+      <TodoBoard todoList={todoList} deleteItem={deleteItem} toggleComplete={toggleComplete} />
     </Container>
   );
 };
