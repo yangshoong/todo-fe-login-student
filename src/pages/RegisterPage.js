@@ -21,8 +21,6 @@ const RegisterPage = () => {
       const response = await api.post('/user', { name, email, password });
       if(response.status == 200){
         navigate('/login');
-      } else if (response.data.error.includes("duplicate key error")) {
-        setError("이미 가입된 사용자입니다.");
       }else{
         throw new Error(response.data.error);
       }
