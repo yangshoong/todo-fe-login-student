@@ -20,10 +20,7 @@ const TodoPage = () => {
 
   const addTodo = async () => {
     try {
-      const response = await api.post("/tasks", {
-        task: todoValue,
-        isComplete: false,
-      });
+      const response = await api.post("/tasks", { task: todoValue, isComplete: false });
       if (response.status === 200) {
         setTodoList([...todoList, response.data.data]);
         setTodoValue("");
@@ -35,10 +32,9 @@ const TodoPage = () => {
 
   const deleteItem = async (id) => {
     try {
-      console.log(id);
       const response = await api.delete(`/tasks/${id}`);
       if (response.status === 200) {
-        getTasks();
+        setTodoList(todoList.filter((item) => item._id !== id));
       }
     } catch (error) {
       console.log("error", error);
@@ -48,11 +44,13 @@ const TodoPage = () => {
   const toggleComplete = async (id) => {
     try {
       const task = todoList.find((item) => item._id === id);
-      const response = await api.put(`/tasks/${id}`, {
-        isComplete: !task.isComplete,
-      });
+      const response = await api.put(`/tasks/${id}`, { isComplete: !task.isComplete });
       if (response.status === 200) {
-        getTasks();
+        setTodoList(
+          todoList.map((item) =>
+            item._id === id ? { ...item, isComplete: !item.isComplete } : item
+          )
+        );
       }
     } catch (error) {
       console.log("error", error);
