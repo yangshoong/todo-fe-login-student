@@ -14,7 +14,10 @@ const TodoItem = ({ item, deleteItem, toggleComplete }) => {
     <Row>
       <Col xs={12}>
         <div className={`todo-item ${item.isComplete ? "item-complete" : ""}`}>
-          <div className="todo-content">{item.task}</div>
+          <div className="todo-content">
+            {item.task}
+            <span className="author-info">by {item.author.name}</span>
+            </div>
           <div>
             <button className="button-delete" onClick={handleDelete}>
               삭제
